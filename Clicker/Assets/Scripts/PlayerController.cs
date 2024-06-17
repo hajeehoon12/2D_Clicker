@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer spriteRenderer;
     GhostDash ghostDash;
 
-    bool Jumping = false;
+    bool Jumping = false;           // AM i Jumping?
     //bool Falling = false;
-    bool Rolling = false;
-    public bool isGrounded = true;
-    bool canCombo = false;
+    bool Rolling = false;           // AM i rolling?
+    public bool isGrounded = true;  // AM i on the ground?
+    bool canCombo = false;          // AM i doing combo attack
 
     int floatCount = 0;
 
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
         //Roll();
 
-        JumpCheck();
+        JumpCheck(); // Checking wheter can jump
 
 
     }

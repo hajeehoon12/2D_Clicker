@@ -4,11 +4,11 @@ using UnityEngine;
 using DG.Tweening;
 public class GhostDash : MonoBehaviour
 {
-    public float ghostDelay;
-    public float fadeDuration;
-    private float ghostDelayTime;
-    public GameObject ghost;
-    public bool makeGhost;
+    public float ghostDelay; // Time interval of ghost effects
+    public float fadeDuration; // Time duration for Ghost Effects
+    private float ghostDelayTime; // Variable To Time Check
+    public GameObject ghost; // Empty Object
+    public bool makeGhost; // Will I Use Ghost Effect?
 
     void Start()
     {
