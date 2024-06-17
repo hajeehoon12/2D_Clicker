@@ -11,7 +11,6 @@ public enum AlphaBet
     d,
     e,
     f
-
 }
 
 
