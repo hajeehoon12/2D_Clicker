@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5530387180077106046}
   - component: {fileID: 7964954611461161073}
   - component: {fileID: 8143362192105415211}
+  - component: {fileID: 8637410429399576789}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -126,6 +127,10 @@ MonoBehaviour:
   maxSpeed: 5
   jumpPower: 12
   isGrounded: 1
+  attackRate: 10
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!50 &6313621975468925686
 Rigidbody2D:
   serializedVersion: 4
@@ -244,3 +249,16 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8637410429399576789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073968807629043396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8673a343df70c0a42845e4a6a49b2bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Money: 0

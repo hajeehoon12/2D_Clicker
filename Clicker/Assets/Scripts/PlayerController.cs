@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     bool Rolling = false;           // AM i rolling?
     public bool isGrounded = true;  // AM i on the ground?
     bool canCombo = false;          // AM i doing combo attack
+    public float attackRate = 10f;
+    public LayerMask enemyLayerMask;
+    
 
     int floatCount = 0;
 
@@ -56,6 +59,48 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    private void Start()
+    {
+        StartCoroutine(DoClick());
+    }
+
+    IEnumerator DoClick()
+    {
+        while (true)
+        {
+            OnClick();
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    public void LevelUp()
+    {
+        attackRate *= 1.2f;
+    }
+
+    public void CheckHit()
+    {
+        Debug.Log("I'm hitting!!");
+        float CheckDir = 1f;
+        
+
+        if (spriteRenderer.flipX) CheckDir = -1f;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position+ new Vector3(0, 1.3f, 0), new Vector2(1, 0) * CheckDir, 2f, enemyLayerMask);
+        {
+            
+            if (hit.collider == null) return;
+            Debug.Log(hit.collider.name);
+            if (hit.transform.gameObject.TryGetComponent(out Reward reward))
+            {
+                reward.GivePlayerReward(attackRate * (1+floatCount*0.1f));
+            }
+                
+        }
+
+    }
+
 
     void OnDash()
     {
@@ -109,6 +154,11 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    void ComboStart()
+    {
+        floatCount = 0;    
+    }
+
     void ComboSum()
     {
         floatCount++;
@@ -119,7 +169,7 @@ public class PlayerController : MonoBehaviour
     {
             //Debug.Log("Attack!!");
         animator.SetBool(isAttacking, true);
-
+        
         if (canCombo) animator.SetTrigger("NextCombo");
 
     }
