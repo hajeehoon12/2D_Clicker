@@ -42,21 +42,21 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        Dash();
+        //Dash();
 
-        Attack();
+        //Attack();
 
-        Roll();
+        //Roll();
 
-        Jump();
+        JumpCheck();
 
 
     }
 
-    void Dash()
+    void OnDash()
     {
 
-        if (Input.GetKeyDown(KeyCode.C) && !ghostDash.makeGhost)
+        if (!ghostDash.makeGhost)
         {
             ghostDash.makeGhost = true;
             animator.SetBool(isDashing, true);
@@ -90,9 +90,9 @@ public class PlayerController : MonoBehaviour
     }
     
 
-    void Roll()
+    void OnRoll()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !Rolling && !Jumping)
+        if (!Rolling && !Jumping)
         {
             animator.SetBool(isRolling, true);
             Rolling = true;
@@ -106,16 +106,13 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(floatCount);
     }
 
-    void Attack()
+    void OnAttack()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
             //Debug.Log("Attack!!");
-            animator.SetBool(isAttacking, true);
+        animator.SetBool(isAttacking, true);
 
-            if (canCombo) animator.SetTrigger("NextCombo");
+        if (canCombo) animator.SetTrigger("NextCombo");
 
-        }
     }
 
     public void ComboEnable()
@@ -176,7 +173,7 @@ public class PlayerController : MonoBehaviour
         transform.position += moveVelocity * maxSpeed * Time.deltaTime;
     }
 
-    private void Jump()
+    private void OnJump()
     {
         //Debug.Log(rigid.velocity.y);
         if (Rolling) return;
@@ -189,14 +186,16 @@ public class PlayerController : MonoBehaviour
             return;
             //Debug.Log("Try Jumping");
         }
+    }
 
+    void JumpCheck()
+    {
         if (rigid.velocity.y < 0 && !isGrounded && Jumping)
         {
             animator.SetBool(isJumping, false);
             animator.SetBool(isFalling, true);
             //Falling = true;
         }
-
     }
 
 

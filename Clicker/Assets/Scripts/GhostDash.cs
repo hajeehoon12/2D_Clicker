@@ -25,32 +25,29 @@ public class GhostDash : MonoBehaviour
                 ghostDelayTime -= Time.deltaTime;
             }
             else
-            {
-                
+            {  
 
                 GameObject currentGhost = Instantiate(ghost, transform.position, transform.rotation);
                 Sprite currentSprite = GetComponent<SpriteRenderer>().sprite;
                 currentGhost.transform.localScale = this.transform.localScale;
 
+                SpriteRenderer ghostSprite = currentGhost.GetComponent<SpriteRenderer>();
+
+                ghostSprite.sprite = currentSprite;
+                ghostSprite.flipX = GetComponent<SpriteRenderer>().flipX;
 
 
-                currentGhost.GetComponent<SpriteRenderer>().sprite = currentSprite;
-                currentGhost.GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
-
-
-                StartCoroutine(GhostBoom(currentGhost));
+                StartCoroutine(GhostBoom(currentGhost, ghostSprite));
                 ghostDelayTime = ghostDelay;
                 
             }
         }
     }
 
-    IEnumerator GhostBoom(GameObject currentGhost)
+    IEnumerator GhostBoom(GameObject currentGhost, SpriteRenderer ghostSprite)
     {
-        SpriteRenderer _spriteRenderer = currentGhost.GetComponent<SpriteRenderer>();
-
-        _spriteRenderer.DOFade(0.5f, 0f);
-        _spriteRenderer.DOFade(0, fadeDuration);
+        ghostSprite.DOFade(0.5f, 0f);
+        ghostSprite.DOFade(0, fadeDuration);
 
         
         yield return new WaitForSeconds(fadeDuration);
