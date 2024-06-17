@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum AlphaBet
+{ 
+    a,
+    b,
+    c,
+    d,
+    e,
+    f
+
+}
+
+
 public class Inventory : MonoBehaviour
 {
     public float Money = 0f;
@@ -34,11 +46,45 @@ public class Inventory : MonoBehaviour
 
     private void Update()
     {
-        totalText.text = "Total Score : " + TotalScore.ToString("N0");
-        moneyText.text = "Money : " + Money.ToString("N0");
-        upgradeText.text = "Need :" + UpgradeCost.ToString("N0");
-        itemUpgradeText.text = "Need : " + ItemUpgradeCost.ToString("N0");
+        totalText.text = "Total Score : " + BigInteger(TotalScore);
+        moneyText.text = "Money : " + BigInteger(Money);
+        upgradeText.text = "Need :" + BigInteger(UpgradeCost);
+        itemUpgradeText.text = "Need : " + BigInteger(ItemUpgradeCost);
         playerController = GetComponent<PlayerController>();
+    }
+
+    public string BigInteger(float num)
+    {
+
+        AlphaBet alphabet = 0;
+        int bigNum;
+        double callnum;
+        string resultString;
+
+
+        callnum = num;
+        while (callnum > 1000)
+        {
+            callnum = System.Math.Truncate(callnum / 1000);
+            alphabet += 1;
+        }
+        
+        
+        bigNum = (int)callnum;
+        resultString = bigNum.ToString();
+
+        if (alphabet != 0)
+        {
+            alphabet -= 1;
+            resultString += alphabet.ToString();
+        }
+        Debug.Log(alphabet.ToString());
+
+
+        return resultString;
+       
+
+
     }
 
 
