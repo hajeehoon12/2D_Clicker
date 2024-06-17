@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private static readonly int isJumping = Animator.StringToHash("IsJumping");
     private static readonly int isFalling = Animator.StringToHash("IsFalling");
     private static readonly int isRolling = Animator.StringToHash("IsRolling");
+    private static readonly int isAttacking = Animator.StringToHash("IsAttacking");
 
 
     Animator animator;
@@ -18,9 +19,10 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer spriteRenderer;
 
     bool Jumping = false;
-    bool Falling = false;
+    //bool Falling = false;
     bool Rolling = false;
     public bool isGrounded = true;
+    bool canCombo = false;
 
     void Awake()
     {
@@ -30,12 +32,17 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+
+        
+
         Move();
 
         
     }
     void Update()
     {
+        Attack();
+
         Roll();
 
         Jump();
@@ -52,8 +59,34 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Attack!!");
+            animator.SetBool(isAttacking, true);
+
+            if (canCombo) animator.SetTrigger("NextCombo");
+
+        }
+    }
+
+    public void ComboEnable()
+    {
+        canCombo = true;
+    }
+
+    public void ComboDisAble()
+    {
+        canCombo = false;        
+    }
 
 
+    public void AttackEnd()
+    {
+        Debug.Log("Combo!!");
+        animator.SetBool(isAttacking, false);
+    }
     
 
     public void RollEnd()
@@ -106,7 +139,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isJumping, false);
             animator.SetBool(isFalling, true);
-            Falling = true;
+            //Falling = true;
         }
 
     }
@@ -131,7 +164,7 @@ public class PlayerController : MonoBehaviour
             
             if (!isGrounded && Jumping)
             {
-                Falling = false;
+                //Falling = false;
                 isGrounded = true;
                 Jumping = false;
                 animator.SetBool(isFalling, false);
