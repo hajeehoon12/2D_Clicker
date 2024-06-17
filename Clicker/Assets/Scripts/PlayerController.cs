@@ -8,46 +8,77 @@ public class PlayerController : MonoBehaviour
     private static readonly int isRunning = Animator.StringToHash("IsRunning");
     private static readonly int isJumping = Animator.StringToHash("IsJumping");
     private static readonly int isFalling = Animator.StringToHash("IsFalling");
+    private static readonly int isRolling = Animator.StringToHash("IsRolling");
 
 
     Animator animator;
 
     public float maxSpeed;// 최대속도 설정
     Rigidbody2D rigid;
+    SpriteRenderer spriteRenderer;
 
     bool Jumping = false;
     bool Falling = false;
+    bool Rolling = false;
     public bool isGrounded = true;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void FixedUpdate()
     {
         Move();
+
+        
     }
     void Update()
     {
+        Roll();
+
         Jump();
     }
+
+    void Roll()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !Rolling && !Jumping)
+        {
+            animator.SetBool(isRolling, true);
+            Rolling = true;
+        }
+        
+    }
+
+
+
+
+    
+
+    public void RollEnd()
+    {
+        animator.SetBool(isRolling, false);
+        Rolling = false;
+    }
+
 
     private void Move()
     {
         Vector3 moveVelocity = Vector3.zero;
+        
 
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
             animator.SetBool(isRunning, true);
             moveVelocity = Vector3.left;
-            GetComponent<SpriteRenderer>().flipX = true;
+            spriteRenderer.flipX = true;
         }
         else if (Input.GetAxisRaw("Horizontal") > 0)
         {
             animator.SetBool(isRunning, true);
             moveVelocity = Vector3.right;
-            GetComponent<SpriteRenderer>().flipX = false;
+            spriteRenderer.flipX = false;
         }
         else
         {
@@ -60,7 +91,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         //Debug.Log(rigid.velocity.y);
-
+        if (Rolling) return;
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // && !Jumping
         {
@@ -94,7 +125,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collider)
     {
 
-        Debug.Log(collider.gameObject.tag);
+        //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
             
