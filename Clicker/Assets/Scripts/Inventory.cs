@@ -35,6 +35,10 @@ public class Inventory : MonoBehaviour
     public Sprite Image2;
     public Sprite Image3;
 
+    public ParticleSystem particle;
+    public ParticleSystem particle2;
+    public ParticleSystem particle3;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -96,9 +100,22 @@ public class Inventory : MonoBehaviour
             UpgradeCost *= 1.5f;
             playerController.LevelUp();
             AudioManager.instance.PlaySFX("AttackUpgrade", 0.2f);
+            particle.gameObject.SetActive(true);
+            if (!particle.isPlaying) particle.Play();
+            StartCoroutine(ParticleOff(particle));
 
         }
     }
+
+    IEnumerator ParticleOff(ParticleSystem curParticle)
+    {
+
+        yield return new WaitForSeconds(1f);
+        if (curParticle.isPlaying) curParticle.Stop();
+        curParticle.gameObject.SetActive(false);
+        
+    }
+
 
     public void ItemUpgrade()
     {
@@ -115,6 +132,12 @@ public class Inventory : MonoBehaviour
                     upgradeImage.sprite = Image1;
                     animator.SetTrigger("Upgrade");
                     AudioManager.instance.PlaySFX("ItemUpgrade", 0.2f);
+
+                    particle2.gameObject.SetActive(true);
+                    if (!particle2.isPlaying) particle2.Play();
+                    StartCoroutine(ParticleOff(particle2));
+
+
                 }
                 
                 break;
@@ -129,6 +152,12 @@ public class Inventory : MonoBehaviour
                     upgradeImage.sprite = Image2;
                     animator.SetTrigger("Upgrade");
                     AudioManager.instance.PlaySFX("ItemUpgrade", 0.2f);
+
+
+                    particle3.gameObject.SetActive(true);
+                    if (!particle3.isPlaying) particle3.Play();
+                    StartCoroutine(ParticleOff(particle3));
+
                 }
                 
 
@@ -144,6 +173,10 @@ public class Inventory : MonoBehaviour
                     upgradeImage.sprite = Image3;
                     animator.SetTrigger("Upgrade");
                     AudioManager.instance.PlaySFX("ItemUpgrade", 0.2f);
+
+                    particle3.gameObject.SetActive(true);
+                    if (!particle3.isPlaying) particle3.Play();
+                    StartCoroutine(ParticleOff(particle3));
 
                 }
                 
