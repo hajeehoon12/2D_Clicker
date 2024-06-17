@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour
 
         JumpCheck(); // Checking wheter can jump
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnClick();
+        }
 
     }
 
@@ -64,6 +68,11 @@ public class PlayerController : MonoBehaviour
         }
 
 
+    }
+
+    void OnClick()
+    {
+        OnAttack();
     }
 
     IEnumerator DoingDash()
