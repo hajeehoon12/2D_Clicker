@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     bool Rolling = false;           // AM i rolling?
     public bool isGrounded = true;  // AM i on the ground?
     bool canCombo = false;          // AM i doing combo attack
-    public float attackRate = 10f;
+    //public float attackRate = 10f;
     
     public LayerMask enemyLayerMask;
 
@@ -79,10 +79,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void LevelUp()
-    {
-        attackRate *= 1.4f;
-    }
+  
 
     public void CheckHit()
     {
@@ -99,7 +96,7 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(hit.collider.name);
             if (hit.transform.gameObject.TryGetComponent(out Reward reward))
             {
-                reward.GivePlayerReward(attackRate * (1+floatCount*0.1f));
+                reward.GivePlayerReward(GetComponent<Inventory>().attackRate * (1+floatCount*0.1f));
             }
                 
         }

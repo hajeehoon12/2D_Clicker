@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.IO;
 
 public enum AlphaBet
 { 
@@ -14,18 +16,22 @@ public enum AlphaBet
 }
 
 
-public class Inventory : MonoBehaviour
+[Serializable]public class Inventory : MonoBehaviour
 {
+    [SerializeField]
     public float Money = 0f;
     public float UpgradeCost = 10f;
     public float ItemUpgradeCost = 100f;
     public float TotalScore = 0f;
+    private int itemlevel = 0;
+    public float attackRate = 10f;
+
     public Text totalText;
     public Text moneyText;
     public Text upgradeText;
     public Text itemUpgradeText;
     PlayerController playerController;
-    private int itemlevel = 0;
+    
 
     public Image upgradeImage;
     Animator animator;
@@ -38,9 +44,25 @@ public class Inventory : MonoBehaviour
     public ParticleSystem particle2;
     public ParticleSystem particle3;
 
+    public string GameDataFileName = ".json";
+
+    public Inventory _inventory;
+    public Inventory inventory
+    {
+        get
+        {
+            if (_inventory == null)
+            {
+                _inventory = new Inventory();
+            }
+            return _inventory;
+        }
+    }
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        _inventory = this;
     }
     private void Start()
     {
@@ -85,7 +107,34 @@ public class Inventory : MonoBehaviour
 
 
         return resultString;
-       
+
+    }
+
+    public void LoadData()
+    {
+        string filePath = Application.persistentDataPath + GameDataFileName;
+
+        if (File.Exists(filePath))
+        {
+            Debug.Log("불러오기 성공!");
+            string FromJsonData = File.ReadAllText(filePath);
+            _inventory = JsonUtility.FromJson<Inventory>(FromJsonData);
+        }
+        else
+        {
+            Debug.Log("새로운 파일 생성");
+
+            _inventory = new Inventory();
+        }
+
+    }
+
+    public void SaveData()
+    {
+        string ToJsonData = JsonUtility.ToJson(inventory);
+        string filePath = Application.persistentDataPath + GameDataFileName;
+        File.WriteAllText(filePath, ToJsonData);
+        Debug.Log("저장 완료!");
 
 
     }
@@ -97,7 +146,7 @@ public class Inventory : MonoBehaviour
         {
             Money -= UpgradeCost;
             UpgradeCost *= 1.5f;
-            playerController.LevelUp();
+            attackRate *= 1.4f;
             AudioManager.instance.PlaySFX("AttackUpgrade", 0.2f);
             particle.gameObject.SetActive(true);
             if (!particle.isPlaying) particle.Play();
