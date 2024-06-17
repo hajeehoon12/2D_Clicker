@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         yield return null;
     }
 
-    void DashOff()
+    public void DashOff()
     {
         ghostDash.makeGhost = false;
         animator.SetBool(isDashing, false);
