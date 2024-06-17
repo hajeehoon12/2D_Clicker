@@ -27,7 +27,12 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded = true;  // AM i on the ground?
     bool canCombo = false;          // AM i doing combo attack
     public float attackRate = 10f;
+    
     public LayerMask enemyLayerMask;
+
+    public bool canRoll = false;
+    public bool canDash = false;
+    public bool canComboAttack = false;
     
 
     int floatCount = 0;
@@ -76,12 +81,12 @@ public class PlayerController : MonoBehaviour
 
     public void LevelUp()
     {
-        attackRate *= 1.2f;
+        attackRate *= 1.4f;
     }
 
     public void CheckHit()
     {
-        Debug.Log("I'm hitting!!");
+        //Debug.Log("I'm hitting!!");
         float CheckDir = 1f;
         
 
@@ -91,7 +96,7 @@ public class PlayerController : MonoBehaviour
         {
             
             if (hit.collider == null) return;
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
             if (hit.transform.gameObject.TryGetComponent(out Reward reward))
             {
                 reward.GivePlayerReward(attackRate * (1+floatCount*0.1f));
@@ -104,6 +109,8 @@ public class PlayerController : MonoBehaviour
 
     void OnDash()
     {
+
+        if (!canDash) return;
 
         if (!ghostDash.makeGhost)
         {
@@ -146,6 +153,8 @@ public class PlayerController : MonoBehaviour
 
     void OnRoll()
     {
+        if (!canRoll) return;
+
         if (!Rolling && !Jumping)
         {
             animator.SetBool(isRolling, true);
@@ -170,12 +179,13 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Attack!!");
         animator.SetBool(isAttacking, true);
         
-        if (canCombo) animator.SetTrigger("NextCombo");
+        if (canCombo && canComboAttack) animator.SetTrigger("NextCombo");
 
     }
 
     public void ComboEnable()
     {
+
         canCombo = true;
         //Debug.Log("ComboEnable");
     }
