@@ -10,13 +10,16 @@ public class PlayerController : MonoBehaviour
     private static readonly int isFalling = Animator.StringToHash("IsFalling");
     private static readonly int isRolling = Animator.StringToHash("IsRolling");
     private static readonly int isAttacking = Animator.StringToHash("IsAttacking");
+    private static readonly int isDashing = Animator.StringToHash("IsDashing");
 
 
     Animator animator;
 
     public float maxSpeed;// 최대속도 설정
+    public float jumpPower;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
+    GhostDash ghostDash;
 
     bool Jumping = false;
     //bool Falling = false;
@@ -24,29 +27,68 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded = true;
     bool canCombo = false;
 
+    int floatCount = 0;
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        ghostDash = GetComponent<GhostDash>();
     }
     private void FixedUpdate()
     {
-
-        
-
         Move();
-
-        
     }
     void Update()
     {
+        Dash();
+
         Attack();
 
         Roll();
 
         Jump();
+
+
     }
+
+    void Dash()
+    {
+
+        if (Input.GetKeyDown(KeyCode.C) && !ghostDash.makeGhost)
+        {
+            ghostDash.makeGhost = true;
+            animator.SetBool(isDashing, true);
+            StartCoroutine(DoingDash());
+        }
+
+
+    }
+
+    IEnumerator DoingDash()
+    {
+        while (ghostDash.makeGhost)
+        {
+            if (spriteRenderer.flipX)
+            {
+                transform.position -= new Vector3(0.2f, 0, 0);
+            }
+            else
+            {
+                transform.position += new Vector3(0.2f, 0, 0);
+            }
+            yield return new WaitForSeconds(0.02f);
+        }
+        yield return null;
+    }
+
+    void DashOff()
+    {
+        ghostDash.makeGhost = false;
+        animator.SetBool(isDashing, false);
+    }
+    
 
     void Roll()
     {
@@ -58,12 +100,17 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    void ComboSum()
+    {
+        floatCount++;
+        //Debug.Log(floatCount);
+    }
 
     void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            Debug.Log("Attack!!");
+            //Debug.Log("Attack!!");
             animator.SetBool(isAttacking, true);
 
             if (canCombo) animator.SetTrigger("NextCombo");
@@ -74,6 +121,7 @@ public class PlayerController : MonoBehaviour
     public void ComboEnable()
     {
         canCombo = true;
+        //Debug.Log("ComboEnable");
     }
 
     public void ComboDisAble()
@@ -84,7 +132,7 @@ public class PlayerController : MonoBehaviour
 
     public void AttackEnd()
     {
-        Debug.Log("Combo!!");
+        //Debug.Log("Combo!!");
         animator.SetBool(isAttacking, false);
     }
     
@@ -99,6 +147,8 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector3 moveVelocity = Vector3.zero;
+
+        if (ghostDash.makeGhost) return;
         
 
         if (Input.GetAxisRaw("Horizontal") < 0)
@@ -118,6 +168,11 @@ public class PlayerController : MonoBehaviour
             animator.SetBool(isRunning, false);
         }
 
+        if (Rolling)
+        {
+            transform.position += moveVelocity * 1.2f * maxSpeed * Time.deltaTime;
+            return;
+        }
         transform.position += moveVelocity * maxSpeed * Time.deltaTime;
     }
 
@@ -148,7 +203,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DoJump()
     {
-        rigid.AddForce(Vector2.up * 15 * rigid.mass, ForceMode2D.Impulse);
+        rigid.AddForce(Vector2.up * jumpPower * rigid.mass, ForceMode2D.Impulse);
         animator.SetBool(isJumping, true);
         yield return new WaitForSeconds(0.1f);
         Jumping = true;
