@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(hit.collider.name);
             if (hit.transform.gameObject.TryGetComponent(out Reward reward))
             {
-                reward.GivePlayerReward(GetComponent<Inventory>().attackRate * (1+floatCount*0.1f));
+                reward.GivePlayerReward(reward.inven.attackRate * (1+floatCount*0.1f));
             }
                 
         }

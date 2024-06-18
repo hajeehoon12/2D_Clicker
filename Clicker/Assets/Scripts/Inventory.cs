@@ -16,14 +16,16 @@ public enum AlphaBet
 }
 
 
-[Serializable]public class Inventory : MonoBehaviour
+
+
+public class Inventory : MonoBehaviour
 {
     [SerializeField]
     public float Money = 0f;
     public float UpgradeCost = 10f;
     public float ItemUpgradeCost = 100f;
     public float TotalScore = 0f;
-    private int itemlevel = 0;
+    public int itemlevel = 0;
     public float attackRate = 10f;
 
     public Text totalText;
@@ -31,7 +33,8 @@ public enum AlphaBet
     public Text upgradeText;
     public Text itemUpgradeText;
     PlayerController playerController;
-    
+
+    public static Inventory instance;
 
     public Image upgradeImage;
     Animator animator;
@@ -44,25 +47,14 @@ public enum AlphaBet
     public ParticleSystem particle2;
     public ParticleSystem particle3;
 
-    public string GameDataFileName = ".json";
+    
 
-    public Inventory _inventory;
-    public Inventory inventory
-    {
-        get
-        {
-            if (_inventory == null)
-            {
-                _inventory = new Inventory();
-            }
-            return _inventory;
-        }
-    }
+    
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        _inventory = this;
+        
     }
     private void Start()
     {
@@ -103,41 +95,14 @@ public enum AlphaBet
             alphabet -= 1;
             resultString += alphabet.ToString();
         }
-        Debug.Log(alphabet.ToString());
+        //Debug.Log(alphabet.ToString());
 
 
         return resultString;
 
     }
 
-    public void LoadData()
-    {
-        string filePath = Application.persistentDataPath + GameDataFileName;
-
-        if (File.Exists(filePath))
-        {
-            Debug.Log("불러오기 성공!");
-            string FromJsonData = File.ReadAllText(filePath);
-            _inventory = JsonUtility.FromJson<Inventory>(FromJsonData);
-        }
-        else
-        {
-            Debug.Log("새로운 파일 생성");
-
-            _inventory = new Inventory();
-        }
-
-    }
-
-    public void SaveData()
-    {
-        string ToJsonData = JsonUtility.ToJson(inventory);
-        string filePath = Application.persistentDataPath + GameDataFileName;
-        File.WriteAllText(filePath, ToJsonData);
-        Debug.Log("저장 완료!");
-
-
-    }
+    
 
 
     public void UpgradeAttack()

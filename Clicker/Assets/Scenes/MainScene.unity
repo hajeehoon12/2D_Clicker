@@ -4115,8 +4115,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 124694606}
-        m_TargetAssemblyTypeName: Inventory, Assembly-CSharp
+      - m_Target: {fileID: 1680665254}
+        m_TargetAssemblyTypeName: Reward, Assembly-CSharp
         m_MethodName: LoadData
         m_Mode: 1
         m_Arguments:
@@ -4946,6 +4946,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inven: {fileID: 124694606}
   playerController: {fileID: 124694605}
+  gameData:
+    data_Money: 0
+    data_UpgradeCost: 10
+    data_ItemUpgradeCost: 100
+    data_TotalScore: 0
+    data_Itemlevel: 0
+    data_attackRate: 10
+  GameDataFileName: .json
 --- !u!1 &1703180774
 GameObject:
   m_ObjectHideFlags: 0
@@ -5728,8 +5736,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 124694606}
-        m_TargetAssemblyTypeName: Inventory, Assembly-CSharp
+      - m_Target: {fileID: 1680665254}
+        m_TargetAssemblyTypeName: Reward, Assembly-CSharp
         m_MethodName: SaveData
         m_Mode: 1
         m_Arguments:
